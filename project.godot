@@ -1,0 +1,48 @@
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
+config_version=4
+
+_global_script_classes=[ {
+"base": "Spatial",
+"class": "Branch",
+"language": "GDScript",
+"path": "res://src/Branch.gd"
+}, {
+"base": "Spatial",
+"class": "Leaves",
+"language": "GDScript",
+"path": "res://src/Leave.gd"
+}, {
+"base": "Spatial",
+"class": "PolyTree",
+"language": "GDScript",
+"path": "res://src/Tree.gd"
+} ]
+_global_script_class_icons={
+"Branch": "",
+"Leaves": "",
+"PolyTree": ""
+}
+
+[application]
+
+config/name="Procedural Trees"
+run/main_scene="res://src/Sandbox.tscn"
+config/icon="res://icon.png"
+
+[display]
+
+window/size/fullscreen=true
+
+[rendering]
+
+quality/shadow_atlas/size=16384
+quality/shadows/filter_mode=2
+quality/filters/msaa=4
+environment/default_environment="res://default_env.tres"
