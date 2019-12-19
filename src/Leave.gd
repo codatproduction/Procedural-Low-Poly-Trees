@@ -86,7 +86,7 @@ func generate_mesh():
 	
 	randomize()
 	noise = OpenSimplexNoise.new()
-	
+	noise.seed = randi()
 	surface_tool = SurfaceTool.new()
 	surface_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	for i in polygons.size():
