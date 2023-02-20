@@ -66,9 +66,9 @@ func subdivide_icosphere():
 		var new_poly = []
 		
 		for poly in polygons:
-			var a = poly.verticies[2]
+			var a = poly.verticies[0]
 			var b = poly.verticies[1]
-			var c = poly.verticies[0]
+			var c = poly.verticies[2]
 			
 			var ab = get_mid(mid_point_cache, a, b)
 			var bc = get_mid(mid_point_cache, b, c)
