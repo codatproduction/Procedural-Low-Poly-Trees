@@ -1,4 +1,4 @@
-extends Spatial
+extends Node3D
 
 var tree = null
 
@@ -11,12 +11,12 @@ func showcase_1():
 	
 	var timer = Timer.new()
 	timer.wait_time = 0.65
-	timer.connect("timeout", self, "_on_Timer_timeout")
+	timer.timeout.connect(self._on_timer_timeout)
 	add_child(timer)
 	timer.start()
 
 
-func _on_Timer_timeout():
+func _on_timer_timeout():
 	tree.queue_free()
 	tree = PolyTree.new()
 	add_child(tree)

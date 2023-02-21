@@ -1,4 +1,4 @@
-extends Spatial
+extends Node3D
 class_name Leaves
 
 # This script is more or less ported from an article written by Peter Winslow on
@@ -9,10 +9,10 @@ var polygons = []
 var m_verticies = []
 var subdivisions = 1
 var surface_tool : SurfaceTool = null
-var noise = null
+var noise:FastNoiseLite = null
 
-func _init(subdivisions):
-	self.subdivisions = subdivisions
+func _init(new_subdivisions):
+	self.subdivisions = new_subdivisions
 	
 	generate_icosphere()
 	subdivide_icosphere()
@@ -66,9 +66,9 @@ func subdivide_icosphere():
 		var new_poly = []
 		
 		for poly in polygons:
-			var a = poly.verticies[2]
+			var a = poly.verticies[0]
 			var b = poly.verticies[1]
-			var c = poly.verticies[0]
+			var c = poly.verticies[2]
 			
 			var ab = get_mid(mid_point_cache, a, b)
 			var bc = get_mid(mid_point_cache, b, c)
@@ -80,12 +80,12 @@ func subdivide_icosphere():
 			new_poly.push_back(Polygon.new(ab, bc, ca))
 
 		polygons = new_poly
-	
+
 
 func generate_mesh():
 	
 	randomize()
-	noise = OpenSimplexNoise.new()
+	noise = FastNoiseLite.new()
 	noise.seed = randi()
 	surface_tool = SurfaceTool.new()
 	surface_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
@@ -96,8 +96,8 @@ func generate_mesh():
 			var vertex = m_verticies[poly.verticies[(poly.verticies.size() - 1) - index]]
 			
 			var normal = vertex.normalized()
-			var u = normal.x * noise.period
-			var v = normal.y * noise.period
+			var u = normal.x * noise.frequency
+			var v = normal.y * noise.frequency
 			var noise_value = noise.get_noise_2d(u, v)
 			vertex = vertex + ((normal * noise_value) * 0.4)
 			
@@ -108,15 +108,14 @@ func generate_mesh():
 	surface_tool.generate_normals()
 	
 	var mesh = surface_tool.commit()
-	var mesh_instance = MeshInstance.new()
+	var mesh_instance = MeshInstance3D.new()
 	mesh_instance.material_override = generate_random_material()
 	mesh_instance.mesh = mesh
 	add_child(mesh_instance)
 	
-	mesh_instance.scale = Vector3(rand_range(0.5, 1.5),rand_range(0.5, 1.5),rand_range(0.5, 1.5))
-	mesh_instance.scale *= rand_range(1, 1.5)
+	mesh_instance.scale = Vector3(randf_range(0.5, 1.5),randf_range(0.5, 1.5),randf_range(0.5, 1.5))
+	mesh_instance.scale *= randf_range(1, 1.5)
 
-		
 
 func get_mid(cache : Dictionary, index_a, index_b):
 	var smaller = min(index_a, index_b)
@@ -145,8 +144,8 @@ class Polygon:
 
 
 func generate_random_material():
-	var material = SpatialMaterial.new()
-	material.albedo_color = Color(rand_range(0, 1), rand_range(0, 1), rand_range(0, 1))
+	var material = StandardMaterial3D.new()
+	material.albedo_color = Color(randf_range(0, 1), randf_range(0, 1), randf_range(0, 1))
 	return material
 
 
