@@ -21,8 +21,9 @@ func _init(leaves = null):
 
 	# Move random values. Modify these until u happy bro!
 	var noise:FastNoiseLite = FastNoiseLite.new()
-	noise.frequency = 1.0 / randf_range(32, 128)
+	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
 	noise.seed = randi()
+	noise.frequency = 1.0 / randf_range(32, 128)
 	var ampl = randf_range(0.4, 1.3)
 	
 	# Iterate through each vertex in the mesh

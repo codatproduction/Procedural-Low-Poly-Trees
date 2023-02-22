@@ -85,6 +85,7 @@ func generate_mesh():
 	
 	randomize()
 	noise = FastNoiseLite.new()
+	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
 	noise.seed = randi()
 	noise.frequency = 1.0 / randi_range(4, 32)
 	surface_tool = SurfaceTool.new()
