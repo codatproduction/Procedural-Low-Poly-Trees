@@ -17,7 +17,7 @@ func _init(new_subdivisions):
 	generate_icosphere()
 	subdivide_icosphere()
 	generate_mesh()
-	
+
 
 func generate_icosphere():
 	
@@ -59,9 +59,8 @@ func generate_icosphere():
 
 
 func subdivide_icosphere():
-	
 	var mid_point_cache = {}
-	
+
 	for i in subdivisions:
 		var new_poly = []
 		for poly in polygons:
@@ -107,13 +106,13 @@ func generate_mesh():
 	
 	surface_tool.index()
 	surface_tool.generate_normals()
-	
+
 	var mesh = surface_tool.commit()
 	var mesh_instance = MeshInstance3D.new()
 	mesh_instance.material_override = generate_random_material()
 	mesh_instance.mesh = mesh
 	add_child(mesh_instance)
-	
+
 	mesh_instance.scale = Vector3(randf_range(0.5, 1.5),randf_range(0.5, 1.5),randf_range(0.5, 1.5))
 	mesh_instance.scale *= randf_range(1, 1.5)
 
@@ -135,7 +134,8 @@ func get_mid(cache : Dictionary, index_a, index_b):
 	
 	cache[key] = ret
 	return ret
-	
+
+
 class Polygon:
 	var verticies = []
 	func _init(a, b, c):
@@ -148,5 +148,3 @@ func generate_random_material():
 	var material = StandardMaterial3D.new()
 	material.albedo_color = Color(randf_range(0, 1), randf_range(0, 1), randf_range(0, 1))
 	return material
-
-

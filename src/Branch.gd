@@ -2,7 +2,6 @@ extends Node3D
 class_name Branch
 
 func _init(leaves = null):
-	
 	var data_tool = MeshDataTool.new()
 	var surface_tool = SurfaceTool.new()
 	var mesh:CylinderMesh = CylinderMesh.new()
@@ -25,20 +24,20 @@ func _init(leaves = null):
 	noise.seed = randi()
 	noise.frequency = 1.0 / randf_range(32, 128)
 	var ampl = randf_range(0.4, 1.3)
-	
+
 	# Iterate through each vertex in the mesh
 	for i in range(data_tool.get_vertex_count()):
 		var vertex = data_tool.get_vertex(i)
-		
+
 		# Provide a noise value to the vertex
 		var normal = vertex.normalized()
 		var u = normal.x / noise.frequency
 		var v = normal.y / noise.frequency
 		var noise_value = noise.get_noise_2d(u, v)
 		vertex = vertex + ((normal * noise_value) * ampl)
-		
+
 		data_tool.set_vertex(i, vertex)
-	
+
 	# Clean up
 	array_mesh.clear_surfaces()
 
@@ -52,15 +51,15 @@ func _init(leaves = null):
 	var mesh_instance = MeshInstance3D.new()
 	mesh_instance.mesh = surface_tool.commit()
 	mesh_instance.material_override = generate_random_material()
-	
+
 	if leaves != null:
 		add_child(leaves)
 		leaves.position = Vector3(0, mesh.height, 0)
 
 	add_child(mesh_instance)
-	
+
 	mesh_instance.position = Vector3(0, mesh.height * 0.5, 0)
-	
+
 # genereates a new material with a random color
 func generate_random_material():
 	var material = StandardMaterial3D.new()
