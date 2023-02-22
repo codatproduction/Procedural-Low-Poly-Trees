@@ -56,7 +56,7 @@ func generate_icosphere():
 	polygons.push_back(Polygon.new(6, 2, 10))
 	polygons.push_back(Polygon.new(8, 6, 7))
 	polygons.push_back(Polygon.new(9, 8, 1))
-	
+
 
 func subdivide_icosphere():
 	
@@ -69,11 +69,11 @@ func subdivide_icosphere():
 			var a = poly.verticies[0]
 			var b = poly.verticies[1]
 			var c = poly.verticies[2]
-			
+
 			var ab = get_mid(mid_point_cache, a, b)
 			var bc = get_mid(mid_point_cache, b, c)
 			var ca = get_mid(mid_point_cache, c, a)
-			
+
 			new_poly.push_back(Polygon.new(a, ab, ca))
 			new_poly.push_back(Polygon.new(b, bc, ab))
 			new_poly.push_back(Polygon.new(c, ca, bc))
@@ -87,6 +87,7 @@ func generate_mesh():
 	randomize()
 	noise = FastNoiseLite.new()
 	noise.seed = randi()
+	noise.frequency = 1.0 / randi_range(4, 32)
 	surface_tool = SurfaceTool.new()
 	surface_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	for i in polygons.size():
@@ -96,11 +97,11 @@ func generate_mesh():
 			var vertex = m_verticies[poly.verticies[(poly.verticies.size() - 1) - index]]
 			
 			var normal = vertex.normalized()
-			var u = normal.x * noise.frequency
-			var v = normal.y * noise.frequency
+			var u = normal.x / noise.frequency
+			var v = normal.y / noise.frequency
 			var noise_value = noise.get_noise_2d(u, v)
 			vertex = vertex + ((normal * noise_value) * 0.4)
-			
+
 			surface_tool.add_vertex(vertex)
 		
 	

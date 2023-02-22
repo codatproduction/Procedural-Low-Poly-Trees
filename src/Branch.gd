@@ -21,7 +21,8 @@ func _init(leaves = null):
 
 	# Move random values. Modify these until u happy bro!
 	var noise:FastNoiseLite = FastNoiseLite.new()
-	noise.frequency = randi_range(32, 128)
+	noise.frequency = 1.0 / randf_range(32, 128)
+	noise.seed = randi()
 	var ampl = randf_range(0.4, 1.3)
 	
 	# Iterate through each vertex in the mesh
@@ -30,16 +31,15 @@ func _init(leaves = null):
 		
 		# Provide a noise value to the vertex
 		var normal = vertex.normalized()
-		var u = normal.x * noise.frequency
-		var v = normal.y * noise.frequency
+		var u = normal.x / noise.frequency
+		var v = normal.y / noise.frequency
 		var noise_value = noise.get_noise_2d(u, v)
 		vertex = vertex + ((normal * noise_value) * ampl)
 		
 		data_tool.set_vertex(i, vertex)
 	
 	# Clean up
-#	for s in range(array_mesh.get_surface_count()):
-#		array_mesh.surface_remove(s)
+	array_mesh.clear_surfaces()
 
 	# Build the mesh from the MeshDataTool with the SurfaceTool
 	data_tool.commit_to_surface(array_mesh)
