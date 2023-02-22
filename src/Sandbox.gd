@@ -4,7 +4,7 @@ var tree = null
 
 func _ready():
 	showcase_1()
-	
+
 func showcase_1():
 	tree = PolyTree.new()
 	add_child(tree)

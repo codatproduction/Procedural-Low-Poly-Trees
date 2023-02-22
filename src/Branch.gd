@@ -5,8 +5,8 @@ func _init(leaves = null):
 	
 	var data_tool = MeshDataTool.new()
 	var surface_tool = SurfaceTool.new()
-	var mesh = CylinderMesh.new()
-	
+	var mesh:CylinderMesh = CylinderMesh.new()
+
 	# Randomizes the meshs properties - modify these to get different outcomes.
 	randomize()
 	mesh.radial_segments = randi_range(4, 8)
@@ -55,6 +55,7 @@ func _init(leaves = null):
 	if leaves != null:
 		add_child(leaves)
 		leaves.position = Vector3(0, mesh.height, 0)
+
 	add_child(mesh_instance)
 	
 	mesh_instance.position = Vector3(0, mesh.height * 0.5, 0)

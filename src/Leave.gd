@@ -8,7 +8,7 @@ class_name Leaves
 var polygons = []
 var m_verticies = []
 var subdivisions = 1
-var surface_tool : SurfaceTool = null
+var surface_tool:SurfaceTool = null
 var noise:FastNoiseLite = null
 
 func _init(new_subdivisions):
@@ -64,7 +64,6 @@ func subdivide_icosphere():
 	
 	for i in subdivisions:
 		var new_poly = []
-		
 		for poly in polygons:
 			var a = poly.verticies[0]
 			var b = poly.verticies[1]
