@@ -44,6 +44,7 @@ func _init(leaves = null):
 	# Build the mesh from the MeshDataTool with the SurfaceTool
 	data_tool.commit_to_surface(array_mesh)
 	surface_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
+	surface_tool.set_smooth_group(-1)
 	surface_tool.create_from(array_mesh, 0)
 	surface_tool.generate_normals()
 

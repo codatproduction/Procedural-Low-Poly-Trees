@@ -89,6 +89,7 @@ func generate_mesh():
 	noise.frequency = 1.0 / randi_range(4, 32)
 	surface_tool = SurfaceTool.new()
 	surface_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
+	surface_tool.set_smooth_group(-1)
 	for i in polygons.size():
 		var poly = polygons[i]
 		
