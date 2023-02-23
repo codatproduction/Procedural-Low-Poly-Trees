@@ -1,4 +1,4 @@
-extends Spatial
+extends Node3D
 class_name Leaves
 
 # This script is more or less ported from an article written by Peter Winslow on
@@ -8,16 +8,16 @@ class_name Leaves
 var polygons = []
 var m_verticies = []
 var subdivisions = 1
-var surface_tool : SurfaceTool = null
-var noise = null
+var surface_tool:SurfaceTool = null
+var noise:FastNoiseLite = null
 
-func _init(subdivisions):
-	self.subdivisions = subdivisions
+func _init(new_subdivisions):
+	self.subdivisions = new_subdivisions
 	
 	generate_icosphere()
 	subdivide_icosphere()
 	generate_mesh()
-	
+
 
 func generate_icosphere():
 	
@@ -56,39 +56,40 @@ func generate_icosphere():
 	polygons.push_back(Polygon.new(6, 2, 10))
 	polygons.push_back(Polygon.new(8, 6, 7))
 	polygons.push_back(Polygon.new(9, 8, 1))
-	
+
 
 func subdivide_icosphere():
-	
 	var mid_point_cache = {}
-	
+
 	for i in subdivisions:
 		var new_poly = []
-		
 		for poly in polygons:
-			var a = poly.verticies[2]
+			var a = poly.verticies[0]
 			var b = poly.verticies[1]
-			var c = poly.verticies[0]
-			
+			var c = poly.verticies[2]
+
 			var ab = get_mid(mid_point_cache, a, b)
 			var bc = get_mid(mid_point_cache, b, c)
 			var ca = get_mid(mid_point_cache, c, a)
-			
+
 			new_poly.push_back(Polygon.new(a, ab, ca))
 			new_poly.push_back(Polygon.new(b, bc, ab))
 			new_poly.push_back(Polygon.new(c, ca, bc))
 			new_poly.push_back(Polygon.new(ab, bc, ca))
 
 		polygons = new_poly
-	
+
 
 func generate_mesh():
 	
 	randomize()
-	noise = OpenSimplexNoise.new()
+	noise = FastNoiseLite.new()
+	noise.noise_type = FastNoiseLite.TYPE_SIMPLEX
 	noise.seed = randi()
+	noise.frequency = 1.0 / randi_range(4, 32)
 	surface_tool = SurfaceTool.new()
 	surface_tool.begin(Mesh.PRIMITIVE_TRIANGLES)
+	surface_tool.set_smooth_group(-1)
 	for i in polygons.size():
 		var poly = polygons[i]
 		
@@ -96,27 +97,26 @@ func generate_mesh():
 			var vertex = m_verticies[poly.verticies[(poly.verticies.size() - 1) - index]]
 			
 			var normal = vertex.normalized()
-			var u = normal.x * noise.period
-			var v = normal.y * noise.period
+			var u = normal.x / noise.frequency
+			var v = normal.y / noise.frequency
 			var noise_value = noise.get_noise_2d(u, v)
 			vertex = vertex + ((normal * noise_value) * 0.4)
-			
+
 			surface_tool.add_vertex(vertex)
 		
 	
 	surface_tool.index()
 	surface_tool.generate_normals()
-	
+
 	var mesh = surface_tool.commit()
-	var mesh_instance = MeshInstance.new()
+	var mesh_instance = MeshInstance3D.new()
 	mesh_instance.material_override = generate_random_material()
 	mesh_instance.mesh = mesh
 	add_child(mesh_instance)
-	
-	mesh_instance.scale = Vector3(rand_range(0.5, 1.5),rand_range(0.5, 1.5),rand_range(0.5, 1.5))
-	mesh_instance.scale *= rand_range(1, 1.5)
 
-		
+	mesh_instance.scale = Vector3(randf_range(0.5, 1.5),randf_range(0.5, 1.5),randf_range(0.5, 1.5))
+	mesh_instance.scale *= randf_range(1, 1.5)
+
 
 func get_mid(cache : Dictionary, index_a, index_b):
 	var smaller = min(index_a, index_b)
@@ -135,7 +135,8 @@ func get_mid(cache : Dictionary, index_a, index_b):
 	
 	cache[key] = ret
 	return ret
-	
+
+
 class Polygon:
 	var verticies = []
 	func _init(a, b, c):
@@ -145,8 +146,6 @@ class Polygon:
 
 
 func generate_random_material():
-	var material = SpatialMaterial.new()
-	material.albedo_color = Color(rand_range(0, 1), rand_range(0, 1), rand_range(0, 1))
+	var material = StandardMaterial3D.new()
+	material.albedo_color = Color(randf_range(0, 1), randf_range(0, 1), randf_range(0, 1))
 	return material
-
-

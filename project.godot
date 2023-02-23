@@ -6,39 +6,22 @@
 ;   [section] ; section goes between []
 ;   param=value ; assign values to parameters
 
-config_version=4
-
-_global_script_classes=[ {
-"base": "Spatial",
-"class": "Branch",
-"language": "GDScript",
-"path": "res://src/Branch.gd"
-}, {
-"base": "Spatial",
-"class": "Leaves",
-"language": "GDScript",
-"path": "res://src/Leave.gd"
-}, {
-"base": "Spatial",
-"class": "PolyTree",
-"language": "GDScript",
-"path": "res://src/Tree.gd"
-} ]
-_global_script_class_icons={
-"Branch": "",
-"Leaves": "",
-"PolyTree": ""
-}
+config_version=5
 
 [application]
 
 config/name="Procedural Trees"
 run/main_scene="res://src/Sandbox.tscn"
+config/features=PackedStringArray("4.0")
 config/icon="res://icon.png"
 
 [display]
 
-window/size/fullscreen=true
+window/size/mode=3
+
+[filesystem]
+
+import/blender/enabled=false
 
 [rendering]
 
